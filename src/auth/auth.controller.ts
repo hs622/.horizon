@@ -10,7 +10,9 @@ import {
 import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
 import { LocalGuard } from './guards/local.guard';
-import { RegisterInput } from './auth.input';
+import { RegisterInput } from './inputs/auth.input';
+import { LoginResponse } from './dto/login-response.dto';
+import { RegisterResponse } from './dto/register-response.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -21,11 +23,12 @@ export class AuthController {
 
   @Post('/login')
   @UseGuards(LocalGuard)
-  async getLogin(@Request() Request) {
+  async getLogin(@Request() Request): Promise<LoginResponse> {
     const token = await this.authService.generateToken(
       Request.user.id,
       Request.user.role,
     );
+
     return {
       user: Request.user,
       ...token,
@@ -33,12 +36,21 @@ export class AuthController {
   }
 
   @Post('/register')
-  getRegister(@Body(ValidationPipe) registerInput: RegisterInput) {
-    return this.userService.createUser(registerInput);
+  async getRegister(
+    @Body(ValidationPipe) registerInput: RegisterInput,
+  ): Promise<RegisterResponse>
+   {
+    const user = await this.userService.createUser(registerInput);
+    console.log(user,"user")
+    const {id}=user;
+    return {
+      user:user,
+      access_token: '',
+    };
   }
 
-  getForgetEmailLink() {}
-  getForgetPasswordLink() {}
-  getForgetPassword() {}
-  getResetPassword() {}
+  // getForgetEmailLink() {}
+  // getForgetPasswordLink() {}
+  // getForgetPassword() {}
+  // getResetPassword() {}
 }

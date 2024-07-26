@@ -9,6 +9,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  saltOrRounds: number = 10;
+
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.userService.getUserByEmail(email);
     if (user && user.password === pass) {
