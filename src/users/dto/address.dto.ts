@@ -1,19 +1,19 @@
-import { IsEmpty, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
+import { IsEmpty, IsOptional, IsString } from "class-validator";
 
 export class CreateAddressDto {
 
   @IsString()
-  state: string;
+  readonly state: string;
   
   @IsString()
-  city: string;
+  readonly city: string;
 
   @IsString()
   @IsOptional()
-  street: string;
+  readonly street: string;
 
   @IsString()
   @IsOptional()
-  zip: string;
+  readonly zip: string;
   
 }

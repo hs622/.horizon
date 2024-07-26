@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -34,6 +35,7 @@ export class UsersController {
   }
 
   @Post()
+  @UsePipes()
   async createUser(@Body(ValidationPipe) createUserDto: CreateUserDto) {
     const user = await this.userService.getUserByEmail(createUserDto.email);
     if (user) throw new NotAcceptableException('Email already taken!');

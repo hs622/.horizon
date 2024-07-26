@@ -4,48 +4,53 @@ import {
   IsInt,
   IsNotEmpty,
   IsNotEmptyObject,
+  IsNumber,
   IsString,
   IsStrongPassword,
   ValidateIf,
-  ValidateNested
+  ValidateNested,
 } from 'class-validator';
 import { CreateAddressDto } from './address.dto';
 import { Type } from 'class-transformer';
 
 enum Role {
-  USER = 'USER',
-  AUTHOR = 'AUTHOR',
-  PUBLISHER = 'PUBLISHER',
+  ADMIN,
+  USER,
+  AUTHOR,
+  PUBLISHER,
 }
 
 export class CreateUserDto {
-
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: 'Name must be a string' })
+  @IsNotEmpty({ message: 'Name is required' })
   readonly name: string;
 
-  @IsEmail()
-  @IsNotEmpty()
+  @IsEmail({}, { message: 'Invalid email address' })
+  @IsNotEmpty({ message: 'Email is required' })
   readonly email: string;
 
-  @IsStrongPassword({
-    minLength: 8,
-    minLowercase: 1,
-    minNumbers: 1,
-    minSymbols: 1,
-    minUppercase: 1,
-  })
+  @IsStrongPassword(
+    {
+      minLength: 8,
+      minLowercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,
+      minUppercase: 1,
+    },
+    { message: 'Password is too weak' },
+  )
   readonly password: string;
 
   @IsNotEmpty()
-  @IsEnum(Role)
+  @IsEnum(Role, { message: 'Invalid role' })
   readonly role: Role;
 
-  @ValidateNested() 
+  @ValidateNested()
+  @IsNotEmptyObject({}, { message: 'Address is required.' })
   @Type(() => CreateAddressDto)
   readonly address: CreateAddressDto;
 
   @IsNotEmpty()
-  @IsInt() 
+  @IsNumber({}, { message: 'Birth year must be a number' })
   readonly birth_year: number;
 }
