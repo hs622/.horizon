@@ -13,15 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Company {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  name    String
-  state   Boolean  @default(true)
-  User    User[]
-  role    Role     @default(PUBLISHER)
-  address Address?
-}
-
 model User {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   email      String   @unique
@@ -29,9 +20,8 @@ model User {
   password   String
   role       Role     @default(USER)
   address    Address?
-  Company    Company? @relation(fields: [companyId], references: [id])
-  companyId  String?  @db.ObjectId
-  birth_year Int?
+  Company    Company?
+  birth_year Int?     @map("birthYear")
 }
 
 type Address {
@@ -46,4 +36,38 @@ enum Role {
   ADMIN
   AUTHOR
   PUBLISHER
+}
+
+model BusinessType {
+  id      String    @id @default(auto()) @map("_id") @db.ObjectId
+  name    String
+  status  Boolean   @default(true)
+  Company Company[]
+}
+
+model Industry {
+  id      String    @id @default(auto()) @map("_id") @db.ObjectId
+  name    String
+  status  Boolean   @default(true)
+  Company Company[]
+}
+
+model Company {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  company_name    String   @map("companyName")
+  industry        String
+  webiste         String?
+  logo            String
+  number_of_emp   Int      @map("NumberOfEmp")
+  established     Int
+  description     String
+  company_email   String   @map("companyEmail")
+  company_address Address? @map("companyAddress")
+
+  businessType     BusinessType @relation(fields: [business_type_id], references: [id])
+  business_type_id String       @unique @map("businessTypeId") @db.ObjectId
+  User             User         @relation(fields: [user_id], references: [id])
+  user_id          String       @unique @map("userId") @db.ObjectId
+  Industry         Industry?    @relation(fields: [industry_id], references: [id])
+  industry_id      String?      @map("industryId") @db.ObjectId
 }
