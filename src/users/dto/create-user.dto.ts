@@ -12,13 +12,7 @@ import {
 } from 'class-validator';
 import { CreateAddressDto } from './address.dto';
 import { Type } from 'class-transformer';
-
-enum Role {
-  ADMIN,
-  USER,
-  AUTHOR,
-  PUBLISHER,
-}
+import { Role } from '@prisma/client';
 
 export class CreateUserDto {
   @IsString({ message: 'Name must be a string' })
