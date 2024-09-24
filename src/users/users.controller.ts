@@ -36,18 +36,18 @@ export class UsersController {
 
   @Post()
   @UsePipes()
-  async createUser(@Body(ValidationPipe) createUserDto: CreateUserDto) {
-    const user = await this.userService.getUserByEmail(createUserDto.email);
+  async createUser(@Body(ValidationPipe) createUser: CreateUserDto) {
+    const user = await this.userService.getUserByEmail(createUser.email);
     if (user) throw new NotAcceptableException('Email already taken!');
 
-    return this.userService.createUser(createUserDto);
+    return this.userService.createUser(createUser);
   }
 
   @Patch(':id')
   updateUser(
     @Param('id') id: string,
-    @Body(ValidationPipe) updateUserDto: UpdateUserDto,
+    @Body(ValidationPipe) updateUser: UpdateUserDto,
   ) {
-    return this.userService.updateUser(id, updateUserDto);
+    return this.userService.updateUser(id, updateUser);
   }
 }
