@@ -18,10 +18,17 @@ model User {
   email      String   @unique
   name       String
   password   String
-  role       Role     @default(USER)
   address    Address?
   Company    Company?
   birth_year Int?     @map("birthYear")
+
+  // role          Role        @relation(fields: [role_id], references: [id])
+  // role_id       String      @unique @map("roleId") @db.ObjectId
+  Permission    Permission? @relation(fields: [permission_id], references: [id])
+  permission_id String[]    @db.ObjectId
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  delectedAt    Boolean     @default(false)
 }
 
 type Address {
@@ -31,24 +38,61 @@ type Address {
   zip    String?
 }
 
-enum Role {
-  USER
-  ADMIN
-  AUTHOR
-  PUBLISHER
+// enum Role {
+//   USER
+//   ADMIN
+//   AUTHOR
+//   PUBLISHER
+// }
+
+model Role {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String   @unique
+  description String?
+  level       Int
+  status      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  delectedAt  Boolean  @default(false)
+
+  // User        User[]
+  Permission Permission[]
+}
+
+model Permission {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  level       Int
+  status      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  delectedAt  Boolean  @default(false)
+
+  User    User[]
+  Role    Role?    @relation(fields: [role_id], references: [id])
+  role_id String[] @db.ObjectId
 }
 
 model BusinessType {
-  id      String    @id @default(auto()) @map("_id") @db.ObjectId
-  name    String
-  status  Boolean   @default(true)
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  status     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  delectedAt Boolean  @default(false)
+
   Company Company[]
 }
 
 model Industry {
-  id      String    @id @default(auto()) @map("_id") @db.ObjectId
-  name    String
-  status  Boolean   @default(true)
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  status     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  delectedAt Boolean  @default(false)
+
   Company Company[]
 }
 
@@ -63,6 +107,9 @@ model Company {
   description     String
   company_email   String   @map("companyEmail")
   company_address Address? @map("companyAddress")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  delectedAt      Boolean  @default(false)
 
   businessType     BusinessType @relation(fields: [business_type_id], references: [id])
   business_type_id String       @unique @map("businessTypeId") @db.ObjectId
