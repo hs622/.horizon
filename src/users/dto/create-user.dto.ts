@@ -35,9 +35,9 @@ export class CreateUserDto {
   )
   readonly password: string;
 
-  @IsNotEmpty()
-  @IsEnum(Role, { message: 'Invalid role' })
-  readonly role: Role;
+  // @IsNotEmpty()
+  // @IsString(Role, { message: 'Invalid role' })
+  // readonly role: Role;
 
   @ValidateNested()
   @IsNotEmptyObject({}, { message: 'Address is required.' })
