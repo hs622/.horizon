@@ -26,9 +26,10 @@ model User {
   // role_id       String      @unique @map("roleId") @db.ObjectId
   Permission    Permission? @relation(fields: [permission_id], references: [id])
   permission_id String[]    @db.ObjectId
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  delectedAt    Boolean     @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt Boolean  @default(false)
 }
 
 type Address {
@@ -53,7 +54,7 @@ model Role {
   status      Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  delectedAt  Boolean  @default(false)
+  deletedAt   Boolean  @default(false)
 
   // User        User[]
   Permission Permission[]
@@ -67,7 +68,7 @@ model Permission {
   status      Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  delectedAt  Boolean  @default(false)
+  deletedAt   Boolean  @default(false)
 
   User    User[]
   Role    Role?    @relation(fields: [role_id], references: [id])
@@ -75,23 +76,23 @@ model Permission {
 }
 
 model BusinessType {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  status     Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  delectedAt Boolean  @default(false)
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt Boolean  @default(false)
 
   Company Company[]
 }
 
 model Industry {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  status     Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  delectedAt Boolean  @default(false)
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt Boolean  @default(false)
 
   Company Company[]
 }
@@ -109,7 +110,7 @@ model Company {
   company_address Address? @map("companyAddress")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  delectedAt      Boolean  @default(false)
+  deletedAt       Boolean  @default(false)
 
   businessType     BusinessType @relation(fields: [business_type_id], references: [id])
   business_type_id String       @unique @map("businessTypeId") @db.ObjectId
