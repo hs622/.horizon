@@ -10,17 +10,24 @@ import { CompaniesModule } from './companies/companies.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RoutesMiddleware } from './middlewares/routes.middleware';
-import { APP_PIPE } from '@nestjs/core'; 
+import { APP_PIPE } from '@nestjs/core';  
+import { ArticlesModule } from './articles/articles.module';
+import { ArticlesController } from './articles/articles.controller';
+import { RolesController } from './roles/roles.controller';
+import { RolesService } from './roles/roles.service';
+import { RolesModule } from './roles/roles.module';
+import { ArticlesService } from './articles/articles.service';
+import { WebhooksModule } from './webhooks/webhooks.module';
 
 @Module({
-  imports: [AppModule, UsersModule, AuthModule, CompaniesModule],
-  controllers: [AppController, UsersController, AuthController],
+  imports: [AppModule, UsersModule, AuthModule, CompaniesModule, RolesModule, ArticlesModule, WebhooksModule],
+  controllers: [AppController, UsersController, AuthController, RolesController, ArticlesController],
   /**
    * For remaider: 
    * APP_PIPE is a token that represents the global pipe instance. We can use it to override the default global pipe with our custom pipe.
    * 
    */
-  providers: [{provide: APP_PIPE, useClass: ValidationPipe }, AppService, PrismaService, UsersService, AuthService],
+  providers: [{provide: APP_PIPE, useClass: ValidationPipe }, AppService, PrismaService, UsersService, AuthService, ArticlesService, RolesService],
 })
 
 export class AppModule {
